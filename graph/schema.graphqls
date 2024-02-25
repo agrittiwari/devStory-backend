@@ -1,0 +1,26 @@
+type User {
+  id: ID!
+  name: String!
+  githubUserName: String
+  videos: [Video]
+}
+
+type Video {
+  id: ID!
+  title: String!
+  url: String!
+  author: User!
+}
+
+type Query {
+  videos: [Video]!
+}
+
+input NewVideo {
+  title: String!
+  url: String!
+  userId: String!
+}
+type Mutation {
+  createVideo(input: NewVideo!): Video!
+}
