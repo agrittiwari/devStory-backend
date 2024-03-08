@@ -5,3 +5,7 @@ Command to run after Schema changes:
 
 Blog to follow
 [https://www.apollographql.com/blog/using-graphql-with-golang](https://www.apollographql.com/blog/using-graphql-with-golang)
+
+Video to follow
+
+https://youtu.be/ocNw1GHovUI
