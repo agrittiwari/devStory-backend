@@ -13,11 +13,43 @@ import (
 
 // CreateVideo is the resolver for the createVideo field.
 func (r *mutationResolver) CreateVideo(ctx context.Context, input model.NewVideo) (*model.Video, error) {
+	var video model.Video
+	var user model.User
+	video.URL = input.URL
+	video.Title = input.Title
+	user.Name="Tiwari Ji"
+	video.Author = &user
+	return &video, nil
 	panic(fmt.Errorf("not implemented: CreateVideo - createVideo"))
+}
+
+// CreateUser is the resolver for the createUser field.
+func (r *mutationResolver) CreateUser(ctx context.Context, input model.NewUser) (string, error) {
+	panic(fmt.Errorf("not implemented: CreateUser - createUser"))
+}
+
+// Login is the resolver for the login field.
+func (r *mutationResolver) Login(ctx context.Context, input model.Login) (string, error) {
+	panic(fmt.Errorf("not implemented: Login - login"))
+}
+
+// RefreshToken is the resolver for the refreshToken field.
+func (r *mutationResolver) RefreshToken(ctx context.Context, input model.RefreshTokenInput) (string, error) {
+	panic(fmt.Errorf("not implemented: RefreshToken - refreshToken"))
 }
 
 // Videos is the resolver for the videos field.
 func (r *queryResolver) Videos(ctx context.Context) ([]*model.Video, error) {
+	var videos []*model.Video
+	dummyVideo := model.Video{
+		Title:  "My Dummy Video",
+		URL:    "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/WhatCarCanYouGetForAGrand.mp4",
+		Author: &model.User{Name: "Agrit Admin"},
+	}
+	videos = append(videos, &dummyVideo)
+
+	return videos, nil
+
 	panic(fmt.Errorf("not implemented: Videos - videos"))
 }
 

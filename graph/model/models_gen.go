@@ -2,7 +2,17 @@
 
 package model
 
+type Login struct {
+	Username string `json:"username"`
+	Password string `json:"password"`
+}
+
 type Mutation struct {
+}
+
+type NewUser struct {
+	Username string `json:"username"`
+	Password string `json:"password"`
 }
 
 type NewVideo struct {
@@ -14,6 +24,10 @@ type NewVideo struct {
 type Query struct {
 }
 
+type RefreshTokenInput struct {
+	Token string `json:"token"`
+}
+
 type User struct {
 	ID             string   `json:"id"`
 	Name           string   `json:"name"`
@@ -22,8 +36,10 @@ type User struct {
 }
 
 type Video struct {
-	ID     string `json:"id"`
-	Title  string `json:"title"`
-	URL    string `json:"url"`
-	Author *User  `json:"author"`
+	ID       string  `json:"id"`
+	Title    string  `json:"title"`
+	SubTitle *string `json:"subTitle,omitempty"`
+	ThunbURL *string `json:"thunbUrl,omitempty"`
+	URL      string  `json:"url"`
+	Author   *User   `json:"author"`
 }
