@@ -9,3 +9,7 @@ Blog to follow
 Video to follow
 
 https://youtu.be/ocNw1GHovUI
+
+<!-- DOCKER COMMANDS -->
+
+//docker run --name pgsql-dev -e POSTGRES_PASSWORD=Welcome4$ -p 5432:5432 postgres
