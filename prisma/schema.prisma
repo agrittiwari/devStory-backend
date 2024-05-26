@@ -1,0 +1,107 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+
+
+
+model TechStack {
+  id Int @id @default(autoincrement())
+  name String @unique
+  type StackType
+  imageUrl String
+  org OrgStack[]
+
+}
+
+enum StackType {
+  LANGUAGE
+  FRAMEWORK
+  LIBRARY
+  SDK
+  TOOLING
+}
+
+model Organisation{
+  id Int @id @default(autoincrement())
+  name String
+  primaryType OrgType
+  secondaryType OrgType
+  stack OrgStack[]
+  projects CommunityProject[]
+
+}
+
+model Individual{
+  id Int @id @default(autoincrement())
+  name String
+  username String @unique
+  github String //Validate later
+  gitlab String //Validate later
+  sideProjects  IndividualProject[]
+
+}
+
+
+model IndividualProject{
+  userId Int
+  projectId Int
+  user Individual @relation(fields: [userId], references: [id])
+  project Project @relation(fields: [projectId], references: [id])
+
+@@id([projectId,userId])
+
+}
+
+model CommunityProject{
+  orgId Int
+  projectId Int
+  org Organisation @relation(fields: [orgId],references: [id])
+  project Project @relation(fields: [projectId], references: [id])
+  
+  @@id([orgId,projectId])
+}
+model Project{
+  id Int @id @default(autoincrement())
+  name String
+  description String //make it markdown
+  githubLink String @unique
+  gitlabLink String @unique
+  individualOwner IndividualProject[]
+  orgOwner CommunityProject[]
+
+}
+
+enum OrgType {
+  MEETUP_FOCUSED
+  COMMUNITY_FOCUSED
+  CONFERENCE_FOCUSED
+  TOOLING
+  FRAMEWORK
+  SAAS
+  OPEN_SOURCE_ENTHUSIAST
+  OPEN_SOURCE_FOCUSED
+  DATABASE
+
+}
+
+model OrgStack {
+stackId Int
+orgId Int
+org Organisation   @relation(fields: [orgId],references: [id])
+stack  TechStack   @relation(fields: [stackId],references: [id])
+
+@@id([orgId,stackId])
+
+}
