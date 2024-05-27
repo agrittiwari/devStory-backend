@@ -35,6 +35,19 @@ enum StackType {
   TOOLING
 }
 
+model Post{
+  id Int @id @default(autoincrement())
+  description String
+  videoUrl String
+  images String[]
+  // likedBy [] 
+  createdAt DateTime
+  updatedAt DateTime
+}
+
+//TODOLRemodel based on this query https://chatgpt.com/c/d2bdb1a7-6068-4305-8286-65f724ecc1b1
+
+
 model Organisation{
   id Int @id @default(autoincrement())
   name String
@@ -42,7 +55,8 @@ model Organisation{
   secondaryType OrgType
   stack OrgStack[]
   projects CommunityProject[]
-
+  createdAt DateTime
+  updatedAt DateTime
 }
 
 model Individual{
@@ -52,7 +66,8 @@ model Individual{
   github String //Validate later
   gitlab String //Validate later
   sideProjects  IndividualProject[]
-
+  createdAt DateTime
+  updatedAt DateTime
 }
 
 
@@ -65,6 +80,7 @@ model IndividualProject{
 @@id([projectId,userId])
 
 }
+
 
 model CommunityProject{
   orgId Int
