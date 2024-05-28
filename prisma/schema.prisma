@@ -23,8 +23,8 @@ model TechStack {
   name String @unique
   type StackType
   imageUrl String
-  org OrgStack[]
-
+  org OrgStack__[]
+  individual IndividualUserStack__[]
 }
 
 enum StackType {
@@ -47,34 +47,52 @@ model Post{
 
 //TODOLRemodel based on this query https://chatgpt.com/c/d2bdb1a7-6068-4305-8286-65f724ecc1b1
 
+model User {
+  id         Int      @id @default(autoincrement())
+  username   String   @unique
+  email      String   @unique
+  password   String
+  userType   UserType
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+  individual IndividualUser?
+  enterprise OrganisationUser?
+}
 
-model Organisation{
-  id Int @id @default(autoincrement())
+enum UserType {
+  INDIVIDUAL
+  ENTERPRISE
+}
+model OrganisationUser{
+  userId Int @id @default(autoincrement())
   name String
   primaryType OrgType
   secondaryType OrgType
-  stack OrgStack[]
-  projects CommunityProject[]
+  stack OrgStack__[]
+  projects OrganisationProject__[]
   createdAt DateTime
   updatedAt DateTime
+  user         User    @relation(fields: [userId], references: [id])
 }
 
-model Individual{
-  id Int @id @default(autoincrement())
+model IndividualUser{
+  userId Int @id @default(autoincrement())
   name String
   username String @unique
   github String //Validate later
   gitlab String //Validate later
-  sideProjects  IndividualProject[]
+  sideProjects  IndividualUserProject__[]
+  stack IndividualUserStack__[]
   createdAt DateTime
   updatedAt DateTime
+  user      User    @relation(fields: [userId], references: [id])
 }
 
 
-model IndividualProject{
+model IndividualUserProject__{
   userId Int
   projectId Int
-  user Individual @relation(fields: [userId], references: [id])
+  user IndividualUser @relation(fields: [userId], references: [userId])
   project Project @relation(fields: [projectId], references: [id])
 
 @@id([projectId,userId])
@@ -82,10 +100,10 @@ model IndividualProject{
 }
 
 
-model CommunityProject{
+model OrganisationProject__{
   orgId Int
   projectId Int
-  org Organisation @relation(fields: [orgId],references: [id])
+  org OrganisationUser @relation(fields: [orgId],references: [userId])
   project Project @relation(fields: [projectId], references: [id])
   
   @@id([orgId,projectId])
@@ -96,8 +114,8 @@ model Project{
   description String //make it markdown
   githubLink String @unique
   gitlabLink String @unique
-  individualOwner IndividualProject[]
-  orgOwner CommunityProject[]
+  IndividualUserOwner IndividualUserProject__[]
+  orgOwner OrganisationProject__[]
 
 }
 
@@ -114,12 +132,21 @@ enum OrgType {
 
 }
 
-model OrgStack {
+model OrgStack__ {
 stackId Int
 orgId Int
-org Organisation   @relation(fields: [orgId],references: [id])
+org OrganisationUser   @relation(fields: [orgId],references: [userId])
 stack  TechStack   @relation(fields: [stackId],references: [id])
 
 @@id([orgId,stackId])
 
+}
+
+model IndividualUserStack__{
+  stackId Int
+  userId Int
+  user IndividualUser @relation(fields: [userId],references:[userId])
+  stack  TechStack   @relation(fields: [stackId],references: [id])
+
+  @@id([userId, stackId])
 }
