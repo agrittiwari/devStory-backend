@@ -39,10 +39,11 @@ model Post{
   id Int @id @default(autoincrement())
   description String
   videoUrl String
-  images String[]
+  imagesUrl String[]
   // likedBy [] 
   createdAt DateTime
   updatedAt DateTime
+  createdBy User @relation(fields: [id],references: [id])
 }
 
 //TODOLRemodel based on this query https://chatgpt.com/c/d2bdb1a7-6068-4305-8286-65f724ecc1b1
@@ -57,6 +58,7 @@ model User {
   updatedAt  DateTime @updatedAt
   individual IndividualUser?
   enterprise OrganisationUser?
+  posts Post[]
 }
 
 enum UserType {
@@ -66,6 +68,7 @@ enum UserType {
 model OrganisationUser{
   userId Int @id @default(autoincrement())
   name String
+  email String @unique
   primaryType OrgType
   secondaryType OrgType
   stack OrgStack__[]
